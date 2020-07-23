@@ -10,10 +10,13 @@ namespace Main
     public class Obj
     {
         public static int globalId = 0;
+        private static Vector2 vector2 = Vector2.Zero;
+
 
         public int id;
         public BoundingBox hitbox;
         public Vector2 position;
+        public Vector2 size;
         public BoundingBox Hitbox 
         {
             get { return hitbox; }
@@ -21,6 +24,7 @@ namespace Main
             { 
                 hitbox = value;
                 position = hitbox.Min.To2();
+                size = Vector2.Subtract(hitbox.Max.To2(), hitbox.Min.To2());
             } 
         }
         public Vector2 Position
@@ -31,6 +35,9 @@ namespace Main
         }
         Texture2D sprite;
         Vector2 spriteToHitbox;
+
+        public float Friction { get; set; }
+
 
         public static Dictionary<int, Obj> Solids = new Dictionary<int, Obj>();
 
@@ -56,63 +63,114 @@ namespace Main
 
         public Obj(int x, int y, Texture2D sprite)
         {
-            this.Hitbox = new BoundingBox(new Vector3(x, y, 0), new Vector3(x + sprite.Width, y + sprite.Height, 0));
-            this.sprite = sprite;
-            spriteToHitbox = Vector2.Zero;
-
-            this.id = globalId++;
+            Constructor(new Vector2(x, y), Vector2.Zero, sprite);
         }
         public Obj(Vector2 pos, Texture2D sprite)
         {
-            this.Hitbox = new BoundingBox(new Vector3(pos.X, pos.Y, 0), new Vector3(pos.X + sprite.Width, pos.Y + sprite.Height, 0));
-            this.sprite = sprite;
-            spriteToHitbox = Vector2.Zero;
-
-            this.id = globalId++;
+            Constructor(pos, Vector2.Zero, sprite);
+        }
+        public Obj(int x, int y, Texture2D sprite, Vector2 size)
+        {
+            Constructor(new Vector2(x, y), Vector2.Zero, sprite, size);
+        }
+        public Obj(Vector2 pos, Texture2D sprite, Vector2 size)
+        {
+            Constructor(pos, Vector2.Zero, sprite, size);
+        }
+        public Obj(int x, int y, Texture2D sprite, int sizeX, int sizeY)
+        {
+            Constructor(new Vector2(x, y), Vector2.Zero, sprite, new Vector2(sizeX, sizeY));
+        }
+        public Obj(Vector2 pos, Texture2D sprite, int sizeX, int sizeY)
+        {
+            Constructor(pos, Vector2.Zero, sprite, new Vector2(sizeX, sizeY));
         }
 
         public Obj(int x, int y)
         {
-            this.Hitbox = new BoundingBox(new Vector3(x, y, 0), new Vector3(x + sprite.Width, y + sprite.Height, 0));        
-            spriteToHitbox = Vector2.Zero;
-
-            this.id = globalId++;
+            this.Position = new Vector2(x, y);
+            this.id = globalId++; 
         }
-        public Obj(Vector2 pos) { 
-            this.Hitbox = new BoundingBox(new Vector3(pos.X, pos.Y, 0), new Vector3(pos.X + sprite.Width, pos.Y + sprite.Height, 0));
-            spriteToHitbox = Vector2.Zero;
-
-            this.id = globalId++;
-        }
-
-
-        public Obj(int x, int y, Texture2D sprite, Vector2 spriteShift)
+        public Obj(Vector2 pos) 
         {
-            this.Hitbox = new BoundingBox(new Vector3(x, y, 0), new Vector3(x + sprite.Width, y + sprite.Height, 0));
+            this.position = pos;
+            this.id = globalId++;
+        }
+
+        public Obj(int x, int y, Vector2 size)
+        {
+            this.Hitbox = new BoundingBox(new Vector3(x, y, 0), new Vector3(x + size.X, y + size.Y, 0));
+            this.id = globalId++;
+        }
+        public Obj(Vector2 pos, Vector2 size)
+        {
+            this.Hitbox = new BoundingBox(new Vector3(pos.X, pos.Y, 0), new Vector3(pos.X + size.X, pos.Y + size.Y, 0));
+            this.id = globalId++;
+        }
+
+        public Obj(int x, int y, int sizeX, int sizeY)
+        {
+            this.Hitbox = new BoundingBox(new Vector3(x, y, 0), new Vector3(x + sizeX, y + sizeY, 0));
+            this.id = globalId++;
+
+        }
+        public Obj(Vector2 pos, int sizeX, int sizeY)
+        {
+            this.Hitbox = new BoundingBox(new Vector3(pos.X, pos.Y, 0), new Vector3(pos.X + sizeX, pos.Y + sizeY, 0));
+            this.id = globalId++;
+        }
+
+
+
+
+        public Obj(int x, int y, Vector2 spriteShift, Texture2D sprite )
+        {
+            Constructor(new Vector2(x, y), spriteShift, sprite);
+        }
+        public Obj(Vector2 pos, Vector2 spriteShift, Texture2D sprite)
+        {
+            Constructor(pos, spriteShift, sprite);
+        }
+        public Obj(int x, int y, int shiftX, int shiftY, Texture2D sprite)
+        {
+            Constructor(new Vector2(x, y), new Vector2(shiftX, shiftY), sprite);
+        }
+        public Obj(Vector2 pos, int shiftX, int shiftY, Texture2D sprite)
+        {
+            Constructor(pos, new Vector2(shiftX, shiftY), sprite);
+        }
+
+        public Obj(int x, int y, Vector2 spriteShift, Texture2D sprite, Vector2 size)
+        {
+            Constructor(new Vector2(x, y), spriteShift, sprite, size);
+        }
+        public Obj(Vector2 pos, Vector2 spriteShift, Texture2D sprite, Vector2 size)
+        {
+            Constructor(pos, spriteShift, sprite, size);
+        }
+        public Obj(int x, int y, int shiftX, int shiftY, Texture2D sprite, Vector2 size)
+        {
+            Constructor(new Vector2(x, y), new Vector2(shiftX, shiftY), sprite, size);
+        }
+        public Obj(Vector2 pos, int shiftX, int shiftY, Texture2D sprite, Vector2 size)
+        {
+            Constructor(pos, new Vector2(shiftX, shiftY), sprite, size);
+        }
+        private void Constructor(Vector2 pos, Vector2 spriteShift, Texture2D sprite, Vector2 size)
+        {
+            this.Hitbox = new BoundingBox(new Vector3(pos.X, pos.Y, 0), new Vector3(pos.X + size.X, pos.Y + size.Y, 0));
             this.sprite = sprite;
-            spriteToHitbox = spriteShift;
+            this.spriteToHitbox = spriteShift;
+            this.size = size;
 
             this.id = globalId++;
         }
-        public Obj(Vector2 pos, Texture2D sprite, Vector2 spriteShift)
+        private void Constructor(Vector2 pos, Vector2 spriteShift, Texture2D sprite)
         {
             this.Hitbox = new BoundingBox(new Vector3(pos.X, pos.Y, 0), new Vector3(pos.X + sprite.Width, pos.Y + sprite.Height, 0));
             this.sprite = sprite;
-            spriteToHitbox = spriteShift;
-
-            this.id = globalId++;
-        }
-        public Obj(int x, int y, Vector2 spriteShift)
-        {
-            this.Hitbox = new BoundingBox(new Vector3(x, y, 0), new Vector3(x + sprite.Width, y + sprite.Height, 0));
-            spriteToHitbox = spriteShift;
-
-            this.id = globalId++;
-        }
-        public Obj(Vector2 pos, Vector2 spriteShift)
-        {
-            this.Hitbox = new BoundingBox(new Vector3(pos.X, pos.Y, 0), new Vector3(pos.X + sprite.Width, pos.Y + sprite.Height, 0));
-            spriteToHitbox = spriteShift;
+            this.spriteToHitbox = spriteShift;
+            this.size = new Vector2(sprite.Width, sprite.Height);
 
             this.id = globalId++;
         }
@@ -121,7 +179,7 @@ namespace Main
 
         public void Draw()
         {
-            Game1._spriteBatch.Draw(sprite, Vector2.Add(Hitbox.Min.To2(), spriteToHitbox), Color.White);
+            Game1._spriteBatch.Draw(sprite, Vector2.Add(Hitbox.Min.To2(), spriteToHitbox), null, Color.White, 0, Vector2.Zero, Vector2.Divide(size, new Vector2(sprite.Width, sprite.Height)), SpriteEffects.None, 0);
         }
     }
 }

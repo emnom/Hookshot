@@ -32,7 +32,7 @@ namespace Main
             _graphics.PreferredBackBufferHeight = GraphicsDevice.DisplayMode.Height - 80;
             _graphics.ApplyChanges();
 
-            _player = new Player(new Vector2(_graphics.PreferredBackBufferWidth/2, _graphics.PreferredBackBufferHeight/2), 0);
+            _player = new Player(_graphics.PreferredBackBufferWidth/2, _graphics.PreferredBackBufferHeight/2);
 
             hookSpeed = 300f;
 
@@ -96,20 +96,6 @@ namespace Main
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            _player.DrawHook();
-            _player.DrawPlayer();
-
-            Game1._spriteBatch.Draw(
-               ballTexture,
-               hookPos,
-               null,
-               Color.White,
-               0f,
-               new Vector2(Game1.ballTexture.Width / 2, Game1.ballTexture.Height / 2),
-               Vector2.One,
-               SpriteEffects.None,
-               0f
-           );
 
             _spriteBatch.End();
 

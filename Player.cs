@@ -21,8 +21,6 @@ namespace Main
 
         public Player(int x, int y, Texture2D sprite, Vector2 spriteShift) : base(x, y, sprite, spriteShift) { this.HookPosition = this.Position; }
         public Player(Vector2 pos, Texture2D sprite, Vector2 spriteShift) : base(pos, sprite, spriteShift) { this.HookPosition = this.Position; }
-        public Player(int x, int y, Vector2 spriteShift) : base(x, y, spriteShift) { this.HookPosition = this.Position; }
-        public Player(Vector2 pos, Vector2 spriteShift) : base(pos, spriteShift) { this.HookPosition = this.Position; }
 
 
 
@@ -51,21 +49,6 @@ namespace Main
         public void DrawHook()
         {
             Game1._spriteBatch.DrawLine(Game1.lineTexture, this.Position, this.HookPosition);   
-        }
-        
-        public void DrawPlayer()
-        {
-            Game1._spriteBatch.Draw(
-                Game1.ballTexture,
-                this.Position,
-                null,
-                Color.White,
-                0f,
-                new Vector2(Game1.ballTexture.Width / 2, Game1.ballTexture.Height / 2),
-                Vector2.One,
-                SpriteEffects.None,
-                0f
-            ); 
         }
 
     }

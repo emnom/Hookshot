@@ -41,7 +41,7 @@ namespace Main
 
         public static Dictionary<int, Obj> Solids = new Dictionary<int, Obj>();
 
-        public bool isSolid;
+        public bool isSolid = false;
 
         public bool IsSolid
         {
@@ -156,6 +156,26 @@ namespace Main
         {
             Constructor(pos, new Vector2(shiftX, shiftY), sprite, size);
         }
+
+
+        public Obj(int x, int y, Vector2 spriteShift, Texture2D sprite, int sizeX, int sizeY)
+        {
+            Constructor(new Vector2(x, y), spriteShift, sprite, new Vector2(sizeX, sizeY));
+        }
+        public Obj(Vector2 pos, Vector2 spriteShift, Texture2D sprite, int sizeX, int sizeY)
+        {
+            Constructor(pos, spriteShift, sprite, new Vector2(sizeX, sizeY));
+        }
+        public Obj(int x, int y, int shiftX, int shiftY, Texture2D sprite, int sizeX, int sizeY)
+        {
+            Constructor(new Vector2(x, y), new Vector2(shiftX, shiftY), sprite, new Vector2(sizeX, sizeY));
+        }
+        public Obj(Vector2 pos, int shiftX, int shiftY, Texture2D sprite, int sizeX, int sizeY)
+        {
+            Constructor(pos, new Vector2(shiftX, shiftY), sprite, new Vector2(sizeX, sizeY));
+        }
+
+
         private void Constructor(Vector2 pos, Vector2 spriteShift, Texture2D sprite, Vector2 size)
         {
             this.Hitbox = new BoundingBox(new Vector3(pos.X, pos.Y, 0), new Vector3(pos.X + size.X, pos.Y + size.Y, 0));
@@ -179,7 +199,10 @@ namespace Main
 
         public void Draw()
         {
-            Game1._spriteBatch.Draw(sprite, Vector2.Add(Hitbox.Min.To2(), spriteToHitbox), null, Color.White, 0, Vector2.Zero, Vector2.Divide(size, new Vector2(sprite.Width, sprite.Height)), SpriteEffects.None, 0);
+            if (sprite != null)
+            {
+                Game1._spriteBatch.Draw(sprite, Vector2.Add(Hitbox.Min.To2(), spriteToHitbox), null, Color.White, 0, Vector2.Zero, Vector2.Divide(size, new Vector2(sprite.Width, sprite.Height)), SpriteEffects.None, 0);
+            }
         }
     }
 }

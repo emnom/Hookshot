@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Extensions;
 
 
 namespace Main
@@ -10,43 +11,38 @@ namespace Main
     {
 
         public static Vector2 Extend(Vector2 start, Vector2 direction)
-        {                 
+        {
+            Ray ray = new Ray(start.To3(), direction.To3());
 
-            if (start.Equals(direction))
+            int? minDistId = null;
+            float? lowestDist = null;
+            float? currentDist = null;
+
+            foreach(KeyValuePair<int, Obj> solid in Obj.Solids)
             {
-                return start;
+                currentDist = ray.Intersects(solid.Value.Hitbox);
+
+                if (currentDist != null)
+                {
+                    if(minDistId == null)
+                    {
+                        minDistId = solid.Key;
+                        lowestDist = currentDist;
+                    }
+                    else if (currentDist < lowestDist)
+                    {
+                        minDistId = solid.Key;
+                        lowestDist = currentDist;
+                    }
+                }
             }
-
-            int screenWidth = Game1._graphics.PreferredBackBufferWidth;
-            int screenHeight = Game1._graphics.PreferredBackBufferHeight;
-
-
-            //The vector pointing from start to direction
-            Vector2 pointer = Vector2.Subtract(direction, start);
-
-            //Makes a rectangle with one corner at start and the other corner at one of the corners of the screen
-            Vector2 shortScreen = Vector2.Subtract(new Vector2(screenWidth * (Math.Sign(pointer.X) + 1) / 2,
-                screenHeight * (Math.Sign(pointer.Y) + 1) / 2), start);
-
-            //To find if it intersects the x or y axis
-            Vector2 ratios = Vector2.Divide(shortScreen, pointer);
-
-            if(ratios.X == ratios.Y)
-            { 
-                
-                return new Vector2(screenWidth * (Math.Sign(pointer.X) + 1)/2,
-                    screenHeight * (Math.Sign(pointer.Y) + 1)/2);
-            }
-            else if (ratios.X < ratios.Y)
+            if (lowestDist != null)
             {
-                return new Vector2(screenWidth * (Math.Sign(pointer.X) + 1) / 2,
-                (pointer.Y * ((screenWidth * (Math.Sign(pointer.X) + 1) / 2) - start.X) / pointer.X) + start.Y);
+                return Vector2.Multiply(Vector2.Normalize(ray.Direction.To2()), (float)lowestDist);
             }
             else
             {
-                return new Vector2((pointer.X * ((screenHeight * (Math.Sign(pointer.Y) + 1) / 2) - start.Y) / pointer.Y) + start.X,
-                screenHeight * (Math.Sign(pointer.Y) + 1) / 2);
-
+                return Vector2.Zero;
             }
         }
 
@@ -54,5 +50,3 @@ namespace Main
 
     }
 }
-
-

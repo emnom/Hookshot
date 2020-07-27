@@ -8,6 +8,7 @@ namespace Main
     {
         public static Texture2D lineTexture;
         public static Texture2D ballTexture;
+        public static Texture2D wallTexture;
         
         public static GraphicsDeviceManager _graphics;
         public static SpriteBatch _spriteBatch;
@@ -17,6 +18,12 @@ namespace Main
         public static Vector2 hookPos;
         public static float hookSpeed;
 
+        public static Wall upWall;
+        public static Wall downWall;
+        public static Wall leftWall;
+        public static Wall rightWall;
+
+        public static Wall tryWall;
         public Game1()
         {
              _graphics = new GraphicsDeviceManager(this);
@@ -34,6 +41,14 @@ namespace Main
 
             _player = new Player(_graphics.PreferredBackBufferWidth/2, _graphics.PreferredBackBufferHeight/2);
 
+            upWall = new Wall(0, 0, _graphics.PreferredBackBufferWidth, 0);
+            downWall = new Wall(0, _graphics.PreferredBackBufferHeight, 0, _graphics.PreferredBackBufferWidth);
+            leftWall = new Wall(0, 0, 0, _graphics.PreferredBackBufferHeight);
+            rightWall = new Wall(_graphics.PreferredBackBufferWidth, 0, 0, _graphics.PreferredBackBufferHeight);
+
+
+
+
             hookSpeed = 300f;
 
             base.Initialize();
@@ -45,6 +60,7 @@ namespace Main
 
             // TODO: use this.Content to load your game content here
 
+            wallTexture = Content.Load<Texture2D>("Sprites/wall");
             lineTexture = Content.Load<Texture2D>("Sprites/line");
             ballTexture = Content.Load<Texture2D>("Sprites/ball");
         }
@@ -96,7 +112,7 @@ namespace Main
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-
+            _player.DrawHook();
             _spriteBatch.End();
 
 

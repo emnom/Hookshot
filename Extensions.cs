@@ -30,5 +30,9 @@ namespace Extensions
             return new Vector3(vector.X, vector.Y, 0);
         }
 
+        public static Vector3 To3(this Vector2 vector, int z)
+        {
+            return new Vector3(vector.X, vector.Y, z);
+        }
     }
 }

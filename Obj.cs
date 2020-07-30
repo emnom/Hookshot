@@ -10,7 +10,6 @@ namespace Main
     public class Obj
     {
         public static int globalId = 0;
-        private static Vector2 vector2 = Vector2.Zero;
 
 
         public int id;

@@ -6,6 +6,7 @@ namespace Main
 {
     public class Game1 : Game
     {
+
         public static Texture2D lineTexture;
         public static Texture2D ballTexture;
         public static Texture2D wallTexture;
@@ -42,10 +43,9 @@ namespace Main
             _player = new Player(_graphics.PreferredBackBufferWidth/2, _graphics.PreferredBackBufferHeight/2);
 
             upWall = new Wall(0, 0, _graphics.PreferredBackBufferWidth, 0);
-            downWall = new Wall(0, _graphics.PreferredBackBufferHeight, 0, _graphics.PreferredBackBufferWidth);
+            downWall = new Wall(0, _graphics.PreferredBackBufferHeight, _graphics.PreferredBackBufferWidth, 0);
             leftWall = new Wall(0, 0, 0, _graphics.PreferredBackBufferHeight);
             rightWall = new Wall(_graphics.PreferredBackBufferWidth, 0, 0, _graphics.PreferredBackBufferHeight);
-
 
 
 
@@ -60,9 +60,12 @@ namespace Main
 
             // TODO: use this.Content to load your game content here
 
-            wallTexture = Content.Load<Texture2D>("Sprites/wall");
+
             lineTexture = Content.Load<Texture2D>("Sprites/line");
             ballTexture = Content.Load<Texture2D>("Sprites/ball");
+            wallTexture = Content.Load<Texture2D>("Sprites/wall");
+
+            tryWall = new Wall(100, 200, wallTexture, 300, 200);
         }
 
         
@@ -112,9 +115,10 @@ namespace Main
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
+            tryWall.Draw();
             _player.DrawHook();
+            _spriteBatch.Draw(ballTexture, hookPos, null, Color.White, 0, new Vector2(ballTexture.Width / 2, ballTexture.Height / 2), 1, SpriteEffects.None, 0);
             _spriteBatch.End();
-
 
 
 

@@ -51,5 +51,6 @@ namespace Main
             Game1._spriteBatch.DrawLine(Game1.lineTexture, this.Position, this.HookPosition);   
         }
 
+
     }
 }

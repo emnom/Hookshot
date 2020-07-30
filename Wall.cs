@@ -25,6 +25,8 @@ namespace Main
         public Wall(int x, int y, Texture2D sprite, int sizeX, int sizeY) : base(x, y, sprite, sizeX, sizeY) { this.IsSolid = true; }
         public Wall(Vector2 pos, Texture2D sprite, int sizeX, int sizeY) : base(pos, sprite, sizeX, sizeY) { this.IsSolid = true; }
 
+
+
         public Wall(int x, int y, int sizeX, int sizeY) : base(x, y, sizeX, sizeY) { this.IsSolid = true; }
 
         public Wall(Vector2 pos, int sizeX, int sizeY) : base(pos, sizeX, sizeY) { this.IsSolid = true; }

@@ -12,7 +12,9 @@ namespace Main
 
         public static Vector2 Extend(Vector2 start, Vector2 direction)
         {
-            Ray ray = new Ray(start.To3(), direction.To3());
+
+
+            Ray ray = new Ray(start.To3(), Vector3.Subtract(direction.To3(), start.To3()));
 
             int? minDistId = null;
             float? lowestDist = null;
@@ -36,12 +38,15 @@ namespace Main
                     }
                 }
             }
+            
+
             if (lowestDist != null)
             {
-                return Vector2.Multiply(Vector2.Normalize(ray.Direction.To2()), (float)lowestDist);
+                return Vector2.Add(Vector2.Multiply(ray.Direction.To2(), (float)lowestDist), start);
             }
             else
             {
+                System.Diagnostics.Debug.WriteLine("Failed");
                 return Vector2.Zero;
             }
         }

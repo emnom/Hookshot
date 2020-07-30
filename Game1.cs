@@ -25,6 +25,13 @@ namespace Main
         public static Wall rightWall;
 
         public static Wall tryWall;
+
+        public static MouseState mState;
+        public static MouseState omState;
+
+        public static KeyboardState kState;
+        public static KeyboardState okState;
+
         public Game1()
         {
              _graphics = new GraphicsDeviceManager(this);
@@ -77,18 +84,21 @@ namespace Main
 
             // TODO: Add your update logic here
 
-            var ksate = Keyboard.GetState();
+            kState = Keyboard.GetState();
+            mState = Mouse.GetState();
 
-            if (ksate.IsKeyDown(Keys.Up))
+
+
+            /*if (kState.IsKeyDown(Keys.Up))
                 hookPos.Y -= hookSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (ksate.IsKeyDown(Keys.Down))
+            if (kState.IsKeyDown(Keys.Down))
                 hookPos.Y += hookSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (ksate.IsKeyDown(Keys.Left))
+            if (kState.IsKeyDown(Keys.Left))
                 hookPos.X -= hookSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (ksate.IsKeyDown(Keys.Right))
+            if (kState.IsKeyDown(Keys.Right))
                 hookPos.X += hookSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (hookPos.X > _graphics.PreferredBackBufferWidth - ballTexture.Width / 2)
@@ -99,13 +109,21 @@ namespace Main
             if (hookPos.Y > _graphics.PreferredBackBufferHeight - ballTexture.Height / 2)
                 hookPos.Y = _graphics.PreferredBackBufferHeight - ballTexture.Height / 2;
             else if (hookPos.Y < ballTexture.Height / 2)
-                hookPos.Y = ballTexture.Height / 2;
+                hookPos.Y = ballTexture.Height / 2;*/
 
-
+            if (mState.LeftButton == ButtonState.Pressed /*&& omState.LeftButton == ButtonState.Released*/)
+            {
+                hookPos.X = mState.X;
+                hookPos.Y = mState.Y;
+            }
 
 
             _player.SendHook(hookPos);
 
+
+
+            okState = kState;
+            omState = mState;
             base.Update(gameTime);
         }
 

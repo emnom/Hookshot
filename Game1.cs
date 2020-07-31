@@ -111,15 +111,16 @@ namespace Main
             else if (hookPos.Y < ballTexture.Height / 2)
                 hookPos.Y = ballTexture.Height / 2;*/
 
-            if (mState.LeftButton == ButtonState.Pressed /*&& omState.LeftButton == ButtonState.Released*/)
+            if (mState.LeftButton == ButtonState.Pressed && omState.LeftButton == ButtonState.Released)
             {
                 hookPos.X = mState.X;
                 hookPos.Y = mState.Y;
+                _player.SendHook(hookPos);
             }
 
 
-            _player.SendHook(hookPos);
 
+            _player.Update();
 
 
             okState = kState;

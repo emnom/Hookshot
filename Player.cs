@@ -36,7 +36,7 @@ namespace Main
         public Vector2 HookDirection { get; set; }
         public float HookSpeed { get; set; } = 30;
 
-        public void Update()
+        new public void Update(GameTime gameTime)
         {
             if(Vector2.Distance(HookEnd, HookPosition) <= HookSpeed)
             {
@@ -46,6 +46,8 @@ namespace Main
             {
                 HookPosition = Vector2.Add(HookPosition, Vector2.Multiply(HookDirection, HookSpeed));
             }
+
+            base.Update(gameTime);
         }
 
 

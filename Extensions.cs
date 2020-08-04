@@ -18,6 +18,17 @@ namespace Extensions
         }
     }
 
+    public static class VectorMath
+    {
+        public static void Add(this Vector2 vector, Vector2 added)
+        {
+            vector = Vector2.Add(vector, added);
+
+        }
+    }
+
+
+
     public static class Convert
     {
         public static Vector2 To2(this Vector3 vector)

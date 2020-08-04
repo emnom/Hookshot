@@ -4,18 +4,34 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using static Main.PhysicsFuncs;
 
 namespace Main
 {
     public class Obj
     {
+
+        public BoundingBox gravityBox;
+
         public static int globalId = 0;
 
+        public float mass;
 
         public int id;
         public BoundingBox hitbox;
+
+        public float currentDrag = Game1.defaultDrag;
+
         public Vector2 position;
+        public Vector2 velocity;
+
         public Vector2 size;
+
+        public float bounce = 0; //Between 0 or 1; 0 equals no bounce; don't set this to 1
+
+        float? distCheck = null;
+
+
         public BoundingBox Hitbox 
         {
             get { return hitbox; }
@@ -88,12 +104,14 @@ namespace Main
         public Obj(int x, int y)
         {
             this.Position = new Vector2(x, y);
-            this.id = globalId++; 
+            this.id = globalId++;
+            this.size = Vector2.Zero;
         }
         public Obj(Vector2 pos) 
         {
             this.position = pos;
             this.id = globalId++;
+            this.size = Vector2.Zero;
         }
 
         public Obj(int x, int y, Vector2 size)
@@ -203,5 +221,63 @@ namespace Main
                 Game1._spriteBatch.Draw(sprite, Vector2.Add(Hitbox.Min.To2(), spriteToHitbox), null, Color.White, 0, Vector2.Zero, Vector2.Divide(size, new Vector2(sprite.Width, sprite.Height)), SpriteEffects.None, 0);
             }
         }
+
+
+
+        public void ApplyForce(Vector2 force)
+        {
+            this.velocity.Add(force);
+        }
+
+        public void ApplyGravity()
+        {
+            ApplyGravity(new Vector2(0, 1));
+        }
+
+        public void ApplyGravity(Vector2 direction)
+        {
+            direction.Normalize();
+
+            this.gravityBox = new BoundingBox(this.Hitbox.Min, Vector3.Add(this.hitbox.Max, new Vector3(Math.Sign(direction.X), Math.Sign(direction.Y), 0)));
+
+            foreach(KeyValuePair<int, Obj> solid in Obj.Solids)
+            {
+                if (solid.Value.Hitbox.Contains(gravityBox) == ContainmentType.Contains || solid.Value.Hitbox.Contains(gravityBox) == ContainmentType.Intersects)
+                {
+                    return;
+                }
+            }
+            
+            ApplyForce(Vector2.Multiply(direction, Game1.gConst));
+        }
+
+
+
+        public void Update(GameTime gameTime)
+        {
+
+            ApplyGravity();
+
+            Extend(this.Hitbox, velocity, distCheck);
+
+            if(velocity.Length() < distCheck)
+            {
+                position.Add(Vector2.Multiply(velocity, (float)gameTime.ElapsedGameTime.TotalSeconds));
+            }
+            else
+            {
+                position = Extend(this.Hitbox, velocity);
+                velocity = Vector2.Multiply(velocity, bounce * (-1));
+            }
+
+
+            /*
+             Add screws  | |
+            */
+
+
+
+        }
+
     }
 }

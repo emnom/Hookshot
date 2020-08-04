@@ -6,6 +6,9 @@ namespace Main
 {
     public class Game1 : Game
     {
+        public static float gConst;
+
+        public static float defaultDrag;
 
         public static Texture2D lineTexture;
         public static Texture2D ballTexture;
@@ -120,7 +123,7 @@ namespace Main
 
 
 
-            _player.Update();
+            _player.Update(gameTime);
 
 
             okState = kState;

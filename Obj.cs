@@ -15,6 +15,8 @@ namespace Main
 
         public static int globalId = 0;
 
+        public static Dictionary<int, Obj> Objs;
+
         public float mass;
 
         public int id;
@@ -201,6 +203,7 @@ namespace Main
             this.size = size;
 
             this.id = globalId++;
+            Objs.Add(id, this);
         }
         private void Constructor(Vector2 pos, Vector2 spriteShift, Texture2D sprite)
         {
@@ -210,6 +213,7 @@ namespace Main
             this.size = new Vector2(sprite.Width, sprite.Height);
 
             this.id = globalId++;
+            Objs.Add(id, this);
         }
 
 
